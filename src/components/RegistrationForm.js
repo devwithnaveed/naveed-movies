@@ -1,14 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import {movieApi} from "constants/axios";
+import {userRequests} from "constants/requests";
+import {tabs} from "pages/LoginPage";
 
-const RegistrationForm = () => {
+const RegistrationForm = ({setActiveTab}) => {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
     showPassword: false,
   });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,13 +24,23 @@ const RegistrationForm = () => {
     setFormData({ ...formData, showPassword: !formData.showPassword });
   };
 
-  const handleSubmit = (e) => {
+  const registerUser = (e) => {
     e.preventDefault();
+    movieApi.post(userRequests.register, {
+      email: formData.email,
+      password: formData.password,
+      username: formData.userName,
+    }).then((response) => {
+      setActiveTab(tabs.LOGIN);
+    }).catch((error) => {
+      console.log(error);
+      setMessage(error.response.data.message);
+    })
   };
 
   return (
-    <form id="registerform" onSubmit={handleSubmit}>
-      <div className="form-group">
+    <>
+      <div >
         <label>User Name</label>
         <input
           type="text"
@@ -37,7 +51,7 @@ const RegistrationForm = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div >
         <label>Email</label>
         <input
           type="email"
@@ -48,7 +62,7 @@ const RegistrationForm = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div >
         <label>Password</label>
         <input
           type={formData.showPassword ? "text" : "password"}
@@ -66,11 +80,11 @@ const RegistrationForm = () => {
         </span>
       </div>
 
-      <button type="submit" className="submit">Register</button>
+      <button className="submit" onClick={(e) => registerUser(e)}>Register</button>
       <div className="panel">
         <p>By signing up, you agree to our Terms & Privacy Policy</p>
       </div>
-    </form>
+    </>
   );
 };
 

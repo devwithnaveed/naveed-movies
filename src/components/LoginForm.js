@@ -1,6 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import {movieApi} from "../constants/axios";
+import {userRequests} from "../constants/requests";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +11,9 @@ const LoginForm = () => {
     password: "",
     showPassword: false,
   });
+  const navigate = useNavigate();
+
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,13 +25,27 @@ const LoginForm = () => {
     setFormData({ ...formData, showPassword: !formData.showPassword });
   };
 
-  const handleSubmit = (e) => {
+  const handleAuth = (e) => {
     e.preventDefault();
+    if(!formData.email || !formData.password) {
+      setMessage("Please enter a email or password");
+      return;
+    }
+    movieApi.post(userRequests.login, {
+      email: formData.email,
+      password: formData.password,
+    }).then((res) => {
+      navigate('/home');
+    }).catch((error) => {
+      console.log(error);
+      setMessage(error.response.data.message);
+    })
+
   };
 
   return (
-    <form id="loginform" onSubmit={handleSubmit}>
-      <div className="form-group">
+    <>
+      <div >
         <label>Email</label>
         <input
           type="email"
@@ -36,7 +56,7 @@ const LoginForm = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div >
         <label>Password</label>
         <input
           type={formData.showPassword ? "text" : "password"}
@@ -54,8 +74,8 @@ const LoginForm = () => {
         </span>
       </div>
 
-      <button type="submit" className="submit">Login</button>
-    </form>
+      <button className="submit" onClick={(e) => handleAuth(e)}>Login</button>
+    </>
   );
 };
 
