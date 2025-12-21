@@ -37,7 +37,7 @@ const MoviePage = () => {
       const { data, meta } = response.data;
 
       setMovies(data);
-      setPagination({o
+      setPagination({
         page: meta.page,
         limit: meta.limit,
         total: meta.total,
