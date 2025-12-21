@@ -5,6 +5,7 @@ export const userRequests = {
 }
 
 export const movieRequests = {
-  login: '/movies',
+  movies: '/movies',
+  movieDetails: (id) => `/movies/${id}`,
   fetchNetflixOriginals: '/fetchNetflixOriginals',
 }
