@@ -29,7 +29,7 @@ const RegistrationForm = ({setActiveTab}) => {
     movieApi.post(userRequests.register, {
       email: formData.email,
       password: formData.password,
-      username: formData.userName,
+      name: formData.userName,
     }).then((response) => {
       setActiveTab(tabs.LOGIN);
     }).catch((error) => {
@@ -84,6 +84,7 @@ const RegistrationForm = ({setActiveTab}) => {
       <div className="panel">
         <p>By signing up, you agree to our Terms & Privacy Policy</p>
       </div>
+      <span className="form-message">{message}</span>
     </>
   );
 };
