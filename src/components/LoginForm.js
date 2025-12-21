@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import {movieApi} from "../constants/axios";
 import {userRequests} from "../constants/requests";
 import {useNavigate} from "react-router-dom";
+import useAppStateContext from "../hooks/useAppStateContext";
 
 const LoginForm = () => {
+  const { dispatch } = useAppStateContext();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -35,9 +37,15 @@ const LoginForm = () => {
       email: formData.email,
       password: formData.password,
     }).then((res) => {
+      dispatch({
+        type: "Login",
+        payload: {
+          token: res?.data?.token,
+          email: formData?.email,
+        },
+      });
       navigate('/home');
     }).catch((error) => {
-      console.log(error);
       setMessage(error.response.data.message);
     })
 
@@ -75,6 +83,8 @@ const LoginForm = () => {
       </div>
 
       <button className="submit" onClick={(e) => handleAuth(e)}>Login</button>
+      <span className="form-message">{message}</span>
+
     </>
   );
 };
