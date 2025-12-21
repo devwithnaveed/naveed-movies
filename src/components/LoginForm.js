@@ -40,8 +40,8 @@ const LoginForm = () => {
       dispatch({
         type: "Login",
         payload: {
-          token: res?.data?.token,
-          email: formData?.email,
+          token: res?.data?.access_token,
+          email: res?.data?.user?.email,
         },
       });
       navigate('/home');

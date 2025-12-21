@@ -1,5 +1,5 @@
 export const userRequests = {
-  login: '/users/login',
+  login: '/auth/login',
   logout: '/users/logout',
   register: '/users/register',
 }
